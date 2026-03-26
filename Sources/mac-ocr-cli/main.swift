@@ -8,7 +8,7 @@
 import Foundation
 
 if CommandLine.arguments.count < 2 {
-    print(TextRecognizeResult.error(code: -1, message: "usage: \(CommandLine.arguments[0]) file").jsonString())
+    print(TextRecognizeResult.error(code: "-1", message: "usage: \(CommandLine.arguments[0]) file").jsonString())
     exit(1)
 }
 

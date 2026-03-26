@@ -39,7 +39,7 @@ class TextRecognizeResult: Codable {
         var width, height: Int?
     }
 
-    var code: Int?
+    var code: String?
     var message: String?
     var image: Image?
     var observations: [Observation]?
@@ -51,12 +51,12 @@ class TextRecognizeResult: Codable {
         do {
             return String(data: try encoder.encode(self), encoding: .utf8)!
         } catch {
-            let err = TextRecognizeResult.error(code: -1, message: "encode error: \(error)")
+            let err = TextRecognizeResult.error(code: "-1", message: "encode error: \(error)")
             return String(data: try! encoder.encode(err), encoding: .utf8)!
         }
     }
 
-    static func error(code: Int, message: String) -> TextRecognizeResult {
+    static func error(code: String, message: String) -> TextRecognizeResult {
         let result = TextRecognizeResult()
         result.code = code
         result.message = message
@@ -71,13 +71,13 @@ class TextRecognizer {
 
         guard let image = NSImage(byReferencingFile: file) else {
             result.message = "load image fail."
-            result.code = 1
+            result.code = "1"
             return result
         }
 
         guard let cgImage = image.cgImage(forProposedRect: .none, context: .none, hints: .none) else {
             result.message = "convert image fail."
-            result.code = 2
+            result.code = "2"
             return result
         }
 
@@ -104,10 +104,10 @@ class TextRecognizer {
         let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
         do {
             try requestHandler.perform([request])
-            result.code = 0
+            result.code = "0"
         } catch {
             result.message = "perform error: \(error)"
-            result.code = 3
+            result.code = "3"
         }
 
         return result
