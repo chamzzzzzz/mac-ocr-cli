@@ -7,26 +7,10 @@
 
 import Foundation
 
-func main() -> Int32 {
-    guard CommandLine.arguments.count == 2 else {
-        print("usage: \(CommandLine.arguments[0]) file")
-        return 1
-    }
-
-    let recognizer = TextRecognizer(imageFile: CommandLine.arguments[1])
-    recognizer.perform()
-
-    if recognizer.error != nil {
-        print(recognizer.error!.localizedDescription)
-        return 1
-    }
-
-    guard let result = recognizer.result() else {
-        return 1
-    }
-
-    print(result)
-    return 0
+if CommandLine.arguments.count < 2 {
+    print(TextRecognizeResult.error(code: -1, message: "usage: \(CommandLine.arguments[0]) file").jsonString())
+    exit(1)
 }
 
-exit(main())
+let result = TextRecognizer().perform(file: CommandLine.arguments[1])
+print(result.jsonString())
